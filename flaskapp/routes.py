@@ -2,6 +2,11 @@ from flask import Flask, redirect,render_template,request,flash,url_for,session
 from flaskapp import app,db,login_manager
 from flaskapp.models import User,diabete,heart,kidney,lungs,liver
 from flask_login import LoginManager, UserMixin, login_user, login_required, current_user,logout_user
+from sklearn.ensemble import RandomForestClassifier,RandomForestRegressor
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.linear_model import LogisticRegression,LinearRegression 
+from sklearn.model_selection import train_test_split 
+from sklearn.metrics import accuracy_score
 import pandas as pd
 import joblib
 import bcrypt
@@ -217,15 +222,30 @@ def dibetessub():
         if flag==1:
             return "You Have Given an Illegal Value Please Retry"
         else:
+            data = diabete.query.all()
+            if data:
+# Extracting features and target values from data
+                X = [[item.processedmeat, item.fired_food, item.soft_drink, item.white_rice,
+                item.physical_excerise, item.obesity, item.family_history, item.father_age,
+                item.age,
+                item.blood_pressure, item.excessive_stress, item.smoking, item.alcoholic,
+                item.sleep_problem]
+                for item in data]
+                y = [item.result for item in data]
+                X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2,
+                random_state=42) # The Testing is 20% and training is 80%
+                # Create and train a Random Forest classifier model
+                model = RandomForestClassifier(random_state=42)
+                model.fit(X_train, y_train)
+# Save the trained model joblib.dump(model, 
 
-            
-            # Create and train a Random Forest classifier model
-            
-                # Save the trained model
+                        # Create and train a Random Forest classifier model
+                            # Save the trained model
                 # Load the model
-            loaded_model = joblib.load('diabetes_risk_model.pkl')
+            
+            
             input_data = [diabetes_details]
-            prediction = loaded_model.predict_proba(input_data)
+            prediction = model.predict_proba(input_data)
             user=User.query.filter_by(username=current_user.username).first()
             data=getting_the_data("Diabetes")
             data=str(data)
@@ -252,6 +272,7 @@ def Heartsub():
         Heart_details.append(int(request.form.get("age")))
         Heart_details.append(request.form.get("checkbox2"))
         Heart_details.append(request.form.get("checkbox7"))
+        Heart_details.append(request.form.get("checkbox8"))
         Heart_details.append(request.form.get("checkbox5"))
         Heart_details.append(request.form.get("checkbox10"))
         Heart_details.append(request.form.get("checkbox9"))
@@ -260,19 +281,27 @@ def Heartsub():
         Heart_details.append(request.form.get("checkbox12"))
         Heart_details.append(request.form.get("checkbox3"))
         Heart_details=List_replacer(Heart_details)   
-        # print(Heart_details) 
+        print(Heart_details) 
         flag=int(List_validator(Heart_details))
-        # print(flag)
+        
         if flag==1:
             return '''
             <script>alert('You Have Entered  invalid data');</script>
                     '''
         else:
-            # query="select Age,Gender,family_history,,smoking,stress,alcoholic,Bodyweight,Excessive_intakeof_salt,Excessive_intakeof_coffee,result from heart"
-            # conn = sqlite3.connect("C:\\AIhealthpro\\instance\\AIhealthpro.db")
-            # data = pd.read_sql_query(query, conn)
-           
-            model = joblib.load('Heart_risk_model.pkl')
+            
+            X = [[item.Age, item.Gender, item.family_history, item.blood_pressure, 
+            item.HyperTension, item.smoking, item.stress, item.alcoholic, 
+            item.BodyWeight, item.Excessive_intakeof_salt, item.Excessive_intakeof_coffee]
+            for item in heart.query.all()]
+
+            y = [item.result for item in heart.query.all()]
+
+
+            X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2) # The Testing is 20% and training is 80% 
+            model = LogisticRegression() 
+            model.fit(X_train, y_train) 
+
             input_details=[Heart_details]
             prediction = model.predict(input_details)
             user=User.query.filter_by(username=current_user.username).first()
@@ -316,10 +345,17 @@ def Kidneysub():
     else:
         
         
-       
-        loaded_model=joblib.load("Kidney_risk_model.pkl")
+        X = [[item.Age, item.FamilyHistory, item.PhysicalExcerise, item.obesity, 
+        item.Hypertension, item.HeartDieases, item.Smoking, 
+        item.excessive_painkillers, item.Alcohol, item.diabetes]
+        for item in kidney.query.all()]
+
+        y = [item.result for item in kidney.query.all()]
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2,random_state=42)
+        model = RandomForestRegressor(random_state=42)
+        model.fit(X_train,y_train) 
         input_data=[kidney_details]
-        prediction=loaded_model.predict(input_data)
+        prediction=model.predict(input_data)
         user=User.query.filter_by(username=current_user.username).first()
         data=getting_the_data("Kidney_Disease")
         data=str(data)
@@ -356,8 +392,14 @@ def Liversub():
         return "You Have entered illegal argument"
     else:
        
-        
-        model = joblib.load('Liver_risk_model.pkl')
+        X = [[item.Gender, item.Family_History, item.Alcohol, item.smoking, 
+        item.Sleep_disorder, item.obesity, item.excessive_medication, 
+        item.excessive_painkillers, item.diabetes]
+        for item in liver.query.all()]
+        y = [item.result for item in liver.query.all()]
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2) # The Testing is20% and training is 80% 
+        model = DecisionTreeClassifier(random_state=42)
+        model.fit(X_train, y_train) 
         prediction=model.predict([Liver_detials])
         user=User.query.filter_by(username=current_user.username).first()
         predict=int(prediction)
