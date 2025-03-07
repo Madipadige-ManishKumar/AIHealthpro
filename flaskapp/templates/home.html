@@ -1,0 +1,92 @@
+{%extends "layout1.html"%}
+{% block content %}
+<html lang="en">
+<head>
+  <title>AIHealthPro</title>
+  <style>
+      .container {
+    background-color: #FFF; /* Set the background color to white */
+    padding: 20px; /* Add some padding for spacing */
+    border-radius: 10px; /* Add rounded corners for a sleek look */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add a subtle shadow for depth */
+}
+    body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+header {
+  background-color: #f2f2f2;
+  padding: 10px 0;
+}
+
+nav ul {
+  list-style: none;
+  text-align: center;
+}
+
+nav ul li {
+  display: inline;
+  margin: 0 10px;
+}
+
+nav ul li a {
+  text-decoration: none;
+  color: #333;
+}
+
+.hero {
+  text-align: center;
+  padding: 50px 0;
+  background-color:aliceblue;
+  border-radius: 20px;
+}
+
+.services {
+  padding: 20px;
+}
+
+.service {
+  margin-bottom: 20px;
+}
+
+footer {
+  text-align: center;
+  background-color: #333;
+  color: #fff;
+  padding: 10px 0;
+}
+
+  </style>
+</head>
+<body>
+  
+  <main class="container">
+    <section class="hero">
+      <h1>Welcome to Our AIHealthPro Website</h1>
+      <p>Get the latest health tips and information</p>
+      <a href="/disinx" class="btn">Learn More</a>
+    </section>
+    
+    <section class="services">
+      <h2>Our Services</h2>
+      <div class="service">
+        <h3>Health Consultation</h3>
+        <p>Expert advice and guidance for your health concerns.</p>
+      </div>
+      <div class="service">
+        <h3>Wellness Programs</h3>
+        <p>Customized wellness plans to improve your overall health.</p>
+      </div>
+    </section>
+  </main>
+  
+  <footer>
+    <p>&copy; 2023 AIHealthPro</p>
+  </footer>
+</body>
+
+
+
+{% endblock %}

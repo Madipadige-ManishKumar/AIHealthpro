@@ -1,0 +1,143 @@
+{% extends "layout1.html" %}
+{%block content%}
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
+    <title>User Health Profile</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #3498db;
+            color: #fff;
+            text-align: center;
+            padding: 10px;
+        }
+
+        #profile-section {
+            margin: 20px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        #profile-picture {
+            margin: 20px;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        }
+
+        #health-report {
+            margin-top: 20px;
+        }
+        .health-card {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        margin-bottom: 5px;
+        padding: 15px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        width: 40%;
+        text-align: center;
+        margin: 0 auto;
+    }
+
+        footer {
+            text-align: center;
+            padding: 10px;
+            background-color: #3498db;
+            color: #fff;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>User Health Profile</h1>
+    </header>
+
+    <div id="profile-section">
+        <div style="size: 20rem;">
+            <img  id="profile-picture" src="https://static.vecteezy.com/system/resources/thumbnails/010/260/479/small/default-avatar-profile-icon-of-social-meres-user-in-clipart-style-vector.jpg" alt="User Profile Picture">
+        </div>
+        
+        <h2>{{username}}</h2>
+        <p>Email: {{email}}</p>
+
+        <div id="health-report">
+          <h3>Health Details Report</h3>
+          <ul class="nav nav-tabs">
+            <li class="nav-item">
+              <a class="nav-link {{dia}}" aria-current="page" href="/Account/0">diabetes</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link  {{hea}} " href="/Account/1">heart</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link  {{kid}}" href="/Account/2">Kidney</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link  {{liv}}" href="/Account/3" >Liver</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {{lun}} " href="/Account/4">lungs</a>
+              </li>
+          </ul>
+          
+      
+
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">Sno</th>
+                <th scope="col">Date</th>
+                <th scope="col">Result</th>
+                <th scope="col">Percentage</th>
+              </tr>
+            </thead>
+            <tbody>
+                {% for index in range(res.date|length) %}
+                <tr>
+                    <td>{{index}}</td>
+                    <td>{{ res.date[index] }}</td>
+                    <td>{{ res.result[index] }}</td>
+                    <td>{{ res.percentage[index] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+          </table>
+          
+        
+      </div>
+      
+
+      <button onclick="editProfile()">Edit Profile</button>
+    </div>
+
+    <footer>
+        &copy; AIHeathPro 2023
+    </footer>
+
+    <script>
+        function editProfile() {
+            // Implement the functionality to edit the user's profile
+            alert('Implement edit profile functionality here');
+        }
+    </script>
+
+</body>
+
+
+
+
+{%endblock%}
